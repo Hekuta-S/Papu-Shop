@@ -68,6 +68,7 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
                           controller: nameProduct,
+                          maxLength: 50,
                           cursorColor: AppConstant.appSecondColor,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
@@ -122,6 +123,7 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
                           controller: descripcionProduct,
+                          maxLength: 100,
                           cursorColor: AppConstant.appSecondColor,
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
