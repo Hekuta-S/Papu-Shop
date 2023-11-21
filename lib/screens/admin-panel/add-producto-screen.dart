@@ -1,0 +1,292 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_shop/controllers/add-producto-controller.dart';
+import 'package:e_shop/controllers/registro-controller.dart';
+import 'package:e_shop/screens/auth-ui/login-screen.dart';
+import 'package:e_shop/utils/app-constant.dart';
+import 'package:e_shop/widgets/boton-switch.dart';
+import 'package:e_shop/widgets/text-field-base.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:get/get.dart';
+
+class AddProductoScreen extends StatefulWidget {
+  const AddProductoScreen({super.key});
+
+  @override
+  State<AddProductoScreen> createState() => _AddProductoScreenState();
+}
+
+class _AddProductoScreenState extends State<AddProductoScreen> {
+  String categoriaid = "0";
+  String categorianame = "0";
+  String seleccionDrDw = "0";
+  String selectedCategoriaName = '';
+  bool swch = false;
+  String nuevovalor = "0";
+  final RegistroController registroController = Get.put(RegistroController());
+  TextEditingController nameProduct = TextEditingController();
+  TextEditingController descripcionProduct = TextEditingController();
+  TextEditingController precioCompleto = TextEditingController();
+  TextEditingController precioVenta = TextEditingController();
+  TextEditingController url = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible) {
+      return Scaffold(
+          appBar: AppBar(
+            backgroundColor: AppConstant.appSecondColor,
+            title: Text(
+              "Añadir Producto",
+              style: TextStyle(color: AppConstant.appTextColor),
+            ),
+          ),
+          body: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Container(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: Get.height / 20,
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Elige las caracteristicas del producto",
+                      style: TextStyle(
+                          color: AppConstant.appSecondColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17),
+                    ),
+                  ),
+                  SizedBox(
+                    height: Get.height / 20,
+                  ),
+                  Container(
+                      margin: EdgeInsets.symmetric(horizontal: 5.0),
+                      width: Get.width,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          controller: nameProduct,
+                          cursorColor: AppConstant.appSecondColor,
+                          keyboardType: TextInputType.name,
+                          decoration: InputDecoration(
+                              hintText: "Nombre Producto",
+                              prefixIcon: Icon(Icons.gif_box),
+                              contentPadding:
+                                  EdgeInsets.only(top: 2.0, left: 8.0),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0))),
+                        ),
+                      )),
+                  Container(
+                      margin: EdgeInsets.symmetric(horizontal: 5.0),
+                      width: Get.width,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          controller: precioCompleto,
+                          cursorColor: AppConstant.appSecondColor,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                              hintText: "Precio Total del producto",
+                              prefixIcon: Icon(Icons.price_change_outlined),
+                              contentPadding:
+                                  EdgeInsets.only(top: 2.0, left: 8.0),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0))),
+                        ),
+                      )),
+                  Container(
+                      margin: EdgeInsets.symmetric(horizontal: 5.0),
+                      width: Get.width,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          controller: precioVenta,
+                          cursorColor: AppConstant.appSecondColor,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                              hintText: "Precio con descuento",
+                              prefixIcon: Icon(Icons.price_change),
+                              contentPadding:
+                                  EdgeInsets.only(top: 2.0, left: 8.0),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0))),
+                        ),
+                      )),
+                  Container(
+                      margin: EdgeInsets.symmetric(horizontal: 5.0),
+                      width: Get.width,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          controller: descripcionProduct,
+                          cursorColor: AppConstant.appSecondColor,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                              hintText: "Añada una descricion a su Producto",
+                              prefixIcon: Icon(Icons.telegram),
+                              contentPadding:
+                                  EdgeInsets.only(top: 2.0, left: 8.0),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0))),
+                        ),
+                      )),
+                  ReusableTextField(
+                      controller: url,
+                      maxlength: 500,
+                      hintText: "Ingrese Url de la imagen",
+                      prefixIcon: Icons.card_travel,
+                      keyboardType: TextInputType.text),
+                  // SizedBox(
+                  //   height: Get.height / 20,
+                  // ),
+                  StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('categorias')
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        List<DropdownMenuItem> categoriasname = [];
+                        if (!snapshot.hasData) {
+                          const CircularProgressIndicator();
+                        } else {
+                          final categorias =
+                              snapshot.data?.docs.reversed.toList();
+                          categoriasname.add(
+                            const DropdownMenuItem(
+                              value: "0",
+                              child: Text(
+                                "Selecciona una Categoria",
+                                style:
+                                    TextStyle(color: AppConstant.appMainColor),
+                              ),
+                            ),
+                          );
+                          for (var catego in snapshot.data!.docs.reversed) {
+                            String categoriaName = catego["categoriaName"];
+                            categoriasname.add(
+                              DropdownMenuItem(
+                                value: catego.id,
+                                child: Text(
+                                  categoriaName,
+                                  style: TextStyle(
+                                      color: AppConstant.appMainColor),
+                                ),
+                              ),
+                            );
+                            if (catego.id == seleccionDrDw) {
+                              selectedCategoriaName = categorianame;
+                            }
+                          }
+                        }
+                        return DropdownButton(
+                          items: categoriasname,
+                          onChanged: (categoriaValor) {
+                            setState(() {
+                              seleccionDrDw = categoriaValor;
+                              selectedCategoriaName = (categoriasname
+                                      .firstWhere((item) =>
+                                          item.value == categoriaValor)
+                                      .child as Text)
+                                  .data!;
+                            });
+
+                            categoriaid = categoriaValor;
+                            print(selectedCategoriaName);
+                            print(categoriaid);
+                            categorianame = selectedCategoriaName;
+                          },
+                          value: seleccionDrDw,
+                          isExpanded: false,
+                          icon: Icon(Icons.arrow_drop_down,
+                              color: AppConstant.appMainColor),
+                          underline: Container(
+                              height: 2, color: AppConstant.appSecondColor),
+                          style: TextStyle(color: Colors.white),
+                        );
+                      }),
+                  SizedBox(
+                    height: Get.height / 20,
+                  ),
+                  BotonSwitchNaranja(
+                    estadoInicial: false,
+                    onCambioEstado: (nuevoValor) {
+                      print("Nuevo valor: $nuevoValor");
+                      swch = nuevoValor == 'true';
+                    },
+                  ),
+                  SizedBox(
+                    height: Get.height / 40,
+                  ),
+                  Material(
+                    child: Container(
+                      width: Get.width / 2,
+                      height: Get.height / 20,
+                      decoration: BoxDecoration(
+                          color: AppConstant.appSecondColor,
+                          borderRadius: BorderRadius.circular(20.0)),
+                      child: TextButton(
+                        child: Text("Guardar Producto",
+                            style: TextStyle(color: AppConstant.appTextColor)),
+                        onPressed: () async {
+                          String name = nameProduct.text.trim();
+                          String pCompleto = precioCompleto.text.trim();
+                          String pVenta = precioVenta.text.trim();
+                          String descrip = descripcionProduct.text.trim();
+                          List<String> urll = [
+                            url.text.trim()
+                          ]; // String descrip = descripcionProduct.text.trim();
+
+                          if (name.isEmpty ||
+                              pCompleto.isEmpty ||
+                              pVenta.isEmpty ||
+                              descrip.isEmpty) {
+                            Get.snackbar(
+                              "Error",
+                              "Por favor ingresa todos los datos",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else {
+                            AddProductoController addProductoController =
+                                AddProductoController();
+                            addProductoController.addProductoMetodo(
+                                name,
+                                categoriaid,
+                                selectedCategoriaName,
+                                pCompleto,
+                                pVenta,
+                                urll,
+                                descrip,
+                                swch);
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: Get.height / 39,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Ya tienes una cuenta?  ",
+                          style: TextStyle(color: AppConstant.appSecondColor)),
+                      GestureDetector(
+                        onTap: () => Get.offAll(() => LoginScreen()),
+                        child: Text("Logueate.",
+                            style: TextStyle(
+                                color: AppConstant.appSecondColor,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ));
+    });
+  }
+}

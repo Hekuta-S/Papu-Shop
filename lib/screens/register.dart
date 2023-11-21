@@ -8,7 +8,7 @@ class Register extends StatelessWidget {
         child: Container(
           child: Column(
             children: <Widget>[
-              Container(
+              Container( 
                 height: 250,
                 width: double.infinity,
                 color: const Color.fromARGB(255, 31, 30, 28),

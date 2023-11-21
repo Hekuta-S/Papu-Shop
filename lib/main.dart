@@ -1,10 +1,13 @@
+import 'package:e_shop/screens/admin-panel/add-categoria-screen.dart';
 import 'package:e_shop/screens/auth-ui/login-screen.dart';
 import 'package:e_shop/screens/auth-ui/register-screen.dart';
 import 'package:e_shop/screens/auth-ui/splash-screen.dart';
+import 'package:e_shop/screens/auth-ui/welcome-screen.dart';
 import 'package:e_shop/screens/register.dart';
 import 'package:e_shop/screens/user-panel/main-screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 import 'firebase_options.dart';
@@ -23,12 +26,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const RegisterScreen(),
+      home: SplashScreen(),
+      builder: EasyLoading.init(),
     );
   }
 }

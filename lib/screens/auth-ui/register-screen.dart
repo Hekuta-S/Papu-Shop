@@ -1,5 +1,7 @@
+import 'package:e_shop/controllers/registro-controller.dart';
 import 'package:e_shop/screens/auth-ui/login-screen.dart';
 import 'package:e_shop/utils/app-constant.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
@@ -13,6 +15,12 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final RegistroController registroController = Get.put(RegistroController());
+  TextEditingController username = TextEditingController();
+  TextEditingController userEmail = TextEditingController();
+  TextEditingController userPhone = TextEditingController();
+  TextEditingController userCity = TextEditingController();
+  TextEditingController userPassword = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible) {
@@ -51,6 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
+                          controller: userEmail,
                           cursorColor: AppConstant.appSecondColor,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
@@ -68,6 +77,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
+                          controller: username,
                           cursorColor: AppConstant.appSecondColor,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
@@ -85,6 +95,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
+                          controller: userPhone,
                           cursorColor: AppConstant.appSecondColor,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
@@ -102,10 +113,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
+                          controller: userCity,
                           cursorColor: AppConstant.appSecondColor,
                           keyboardType: TextInputType.streetAddress,
                           decoration: InputDecoration(
-                              hintText: "Direccion",
+                              hintText: "Ciudad",
                               prefixIcon: Icon(Icons.home),
                               contentPadding:
                                   EdgeInsets.only(top: 2.0, left: 8.0),
@@ -117,20 +129,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     margin: EdgeInsets.symmetric(horizontal: 5.0),
                     width: Get.width,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        cursorColor: AppConstant.appSecondColor,
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: InputDecoration(
-                            hintText: "Contraseña",
-                            prefixIcon: Icon(Icons.password),
-                            suffixIcon: Icon(Icons.visibility_off),
-                            contentPadding:
-                                EdgeInsets.only(top: 2.0, left: 8.0),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0))),
-                      ),
-                    ),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Obx(
+                          () => TextFormField(
+                            controller: userPassword,
+                            obscureText:
+                                registroController.isPasswordVisible.value,
+                            cursorColor: AppConstant.appSecondColor,
+                            keyboardType: TextInputType.visiblePassword,
+                            decoration: InputDecoration(
+                                hintText: "Contraseña",
+                                prefixIcon: Icon(Icons.password),
+                                suffixIcon: GestureDetector(
+                                    onTap: () {
+                                      registroController.isPasswordVisible
+                                          .toggle();
+                                    },
+                                    child: registroController
+                                            .isPasswordVisible.value
+                                        ? Icon(Icons.visibility_off)
+                                        : Icon(Icons.visibility)),
+                                contentPadding:
+                                    EdgeInsets.only(top: 2.0, left: 8.0),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0))),
+                          ),
+                        )),
                   ),
                   SizedBox(
                     height: Get.height / 20,
@@ -145,7 +169,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: TextButton(
                         child: Text("REGISTRARSE",
                             style: TextStyle(color: AppConstant.appTextColor)),
-                        onPressed: () {},
+                        onPressed: () async {
+                          String name = username.text.trim();
+                          String email = userEmail.text.trim();
+                          String phone = userPhone.text.trim();
+                          String city = userCity.text.trim();
+                          String password = userPassword.text.trim();
+                          String userDeviceToken = '';
+                          if (name.isEmpty ||
+                              email.isEmpty ||
+                              phone.isEmpty ||
+                              city.isEmpty ||
+                              password.isEmpty) {
+                            Get.snackbar(
+                              "Error",
+                              "Por favor ingresa todos los datos",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else {
+                            UserCredential? userCredential =
+                                await registroController.registrarMetodo(
+                              name,
+                              email,
+                              phone,
+                              city,
+                              password,
+                              userDeviceToken,
+                            );
+
+                            if (userCredential != null) {
+                              Get.snackbar(
+                                "Correo de verificacion enviado.",
+                                "Por favor revisa tu email.",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: AppConstant.appSecondColor,
+                                colorText: AppConstant.appTextColor,
+                              );
+
+                              FirebaseAuth.instance.signOut();
+                              Get.offAll(() => LoginScreen());
+                            }
+                          }
+                        },
                       ),
                     ),
                   ),

@@ -1,12 +1,18 @@
 // ignore_for_file: file_names
 
+import 'package:e_shop/screens/auth-ui/login-screen.dart';
 import 'package:e_shop/utils/app-constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../controllers/inicio-sesio-google-controller.dart';
+
 class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({super.key});
+  WelcomeScreen({super.key});
+
+  final GoogleInicioSesionController _googleInicioSesionController =
+      Get.put(GoogleInicioSesionController());
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +56,11 @@ class WelcomeScreen extends StatelessWidget {
                     width: Get.width / 20,
                     height: Get.height / 20,
                   ),
-                  label: Text("Registrate con google",
+                  label: Text("Inicia sesion con google",
                       style: TextStyle(color: AppConstant.appTextColor)),
-                  onPressed: () {},
+                  onPressed: () {
+                    _googleInicioSesionController.inicioSesionConGoogle();
+                  },
                 ),
               ),
             ),
@@ -71,9 +79,11 @@ class WelcomeScreen extends StatelessWidget {
                     Icons.email,
                     color: AppConstant.appTextColor,
                   ),
-                  label: Text("Registrate con Email",
+                  label: Text("Inicia sesion con con Email",
                       style: TextStyle(color: AppConstant.appTextColor)),
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(() => LoginScreen());
+                  },
                 ),
               ),
             )
