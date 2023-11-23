@@ -1,4 +1,6 @@
 import 'package:e_shop/screens/admin-panel/crud-categorias-screen.dart';
+import 'package:e_shop/screens/admin-panel/crud-productos-off-screen.dart';
+import 'package:e_shop/screens/admin-panel/crud-productos-screnn.dart';
 import 'package:e_shop/screens/user-panel/carrito-screen.dart';
 import 'package:e_shop/screens/user-panel/todas-ventas-flash-productos.dart';
 import 'package:e_shop/utils/app-constant.dart';
@@ -57,7 +59,7 @@ class AdminMainScreen extends StatelessWidget {
             HeadingWidget(
               headingTitle: "Ventas Relampago",
               headingSubTitle: "Precios bajos",
-              onTap: () => Get.to(() => AllVentasFlashProductoScreen()),
+              onTap: () => Get.to(() => CrudProductosFlashScreen()),
               buttonText: "Ver más >",
             ),
 
@@ -66,7 +68,7 @@ class AdminMainScreen extends StatelessWidget {
             HeadingWidget(
               headingTitle: "Todos los Productos",
               headingSubTitle: "Precios bajos",
-              onTap: () => Get.to(() => CarritoScreen()),
+              onTap: () => Get.to(() => CrudProductosScreen()),
               buttonText: "Ver más >",
             ),
 

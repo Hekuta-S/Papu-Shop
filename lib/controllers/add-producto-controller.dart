@@ -29,4 +29,15 @@ class AddProductoController extends GetxController {
     String productoId = docRef.id;
     await docRef.update({"productoId": productoId});
   }
+
+  Future<bool> checkProductoExistencia(String productoName) async {
+    // Consultar la colección de productos para verificar si ya existe
+    QuerySnapshot querySnapshot = await _firestore
+        .collection("productos")
+        .where("productoName", isEqualTo: productoName)
+        .get();
+
+    // Si hay documentos en la consulta, significa que el producto ya existe
+    return querySnapshot.docs.isNotEmpty;
+  }
 }

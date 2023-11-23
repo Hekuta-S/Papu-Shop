@@ -3,11 +3,14 @@
 import 'dart:io';
 
 import 'package:e_shop/controllers/registro-controller.dart';
+import 'package:e_shop/screens/admin-panel/admin-main-screen.dart';
 import 'package:e_shop/screens/auth-ui/login-screen.dart';
 import 'package:e_shop/utils/app-constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
+
+import '../../controllers/add-categoria-controller.dart';
 
 final _formkey = GlobalKey<FormState>();
 
@@ -20,6 +23,7 @@ class AddCategoriaScreen extends StatefulWidget {
 
 class _AddCategoriaScreenState extends State<AddCategoriaScreen> {
   File? image_to_subir;
+  AddCategoriaController addCategoriaController = AddCategoriaController();
   final RegistroController registroController = Get.put(RegistroController());
   TextEditingController categoriaName = TextEditingController();
   TextEditingController categoriaImg = TextEditingController();
@@ -101,10 +105,6 @@ class _AddCategoriaScreenState extends State<AddCategoriaScreen> {
                     ),
                   ),
 
-                  // SizedBox(
-                  //   height: Get.height / 20,
-                  // ),
-
                   Material(
                     child: Container(
                       margin: EdgeInsets.symmetric(horizontal: 5.0),
@@ -181,32 +181,54 @@ class _AddCategoriaScreenState extends State<AddCategoriaScreen> {
                       child: TextButton(
                         child: Text("GUARDAR",
                             style: TextStyle(color: AppConstant.appTextColor)),
-                        onPressed: () {
-                          _formkey.currentState!.validate();
-                          // String name = categoriaName.text.trim();
-                          // String img = categoriaImg.text.trim();
-                          // if (name.isEmpty) {
-                          //   Get.snackbar(
-                          //     "Error",
-                          //     "Por favor ingresa todos los datos",
-                          //     snackPosition: SnackPosition.BOTTOM,
-                          //     backgroundColor: AppConstant.appSecondColor,
-                          //     colorText: AppConstant.appTextColor,
-                          //   );
-                          // } else {
-                          //   AddCategoriaController addCategoriaController =
-                          //       AddCategoriaController();
-                          //   addCategoriaController.addCategoriaMetodo(
-                          //       name, img);
-                          //   Get.snackbar(
-                          //     "Categoria Guardada Exitosamente.",
-                          //     "             :D.",
-                          //     snackPosition: SnackPosition.BOTTOM,
-                          //     backgroundColor: AppConstant.appSecondColor,
-                          //     colorText: AppConstant.appTextColor,
-                          //   );
-                          //   Get.offAll(() => LoginScreen());
-                          // }
+                        onPressed: () async {
+                          // _formkey.currentState!.validate();
+                          String name = categoriaName.text.trim();
+                          String img = categoriaImg.text.trim();
+                          if (name.isEmpty) {
+                            Get.snackbar(
+                              "Error",
+                              "Por favor ingresa todos los datos",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else if (name.length < 10) {
+                            Get.snackbar(
+                              "Error",
+                              "El nombre de la categoría debe tener más de 10 caracteres",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else {
+                            AddCategoriaController addCategoriaController =
+                                AddCategoriaController();
+
+                            bool categoriaExists = await addCategoriaController
+                                .checkCategoriaExistencia(name);
+
+                            if (categoriaExists) {
+                              Get.snackbar(
+                                "Error al guardar la categoría.",
+                                "La categoría ya existe.",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: AppConstant.appSecondColor,
+                                colorText: AppConstant.appTextColor,
+                              );
+                            } else {
+                              addCategoriaController.addCategoriaMetodo(
+                                  name, img);
+                              Get.snackbar(
+                                "Categoria Guardada Exitosamente.",
+                                "             :D.",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: AppConstant.appSecondColor,
+                                colorText: AppConstant.appTextColor,
+                              );
+                              Get.offAll(() => AdminMainScreen());
+                            }
+                          }
                         },
                       ),
                     ),

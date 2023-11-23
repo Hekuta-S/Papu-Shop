@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:e_shop/controllers/add-producto-controller.dart';
 import 'package:e_shop/controllers/registro-controller.dart';
+import 'package:e_shop/controllers/update-producto-controller.dart';
+import 'package:e_shop/models/producto-model.dart';
+import 'package:e_shop/screens/admin-panel/admin-main-screen.dart';
 import 'package:e_shop/screens/auth-ui/login-screen.dart';
 import 'package:e_shop/utils/app-constant.dart';
 import 'package:e_shop/widgets/boton-switch.dart';
@@ -9,18 +12,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 
-class AddProductoScreen extends StatefulWidget {
-  const AddProductoScreen({super.key});
+import '../../controllers/eliminar-archivo-firebase-controller.dart';
+import '../../widgets/buttom-borrar.dart';
+
+class UpdateProductoScreen extends StatefulWidget {
+  final ProductoModel productoModel;
+  const UpdateProductoScreen(this.productoModel, {super.key});
 
   @override
-  State<AddProductoScreen> createState() => _AddProductoScreenState();
+  State<UpdateProductoScreen> createState() => _UpdateProductoScreenState();
 }
 
-class _AddProductoScreenState extends State<AddProductoScreen> {
+class _UpdateProductoScreenState extends State<UpdateProductoScreen> {
   String categoriaid = "0";
   String categorianame = "0";
   String seleccionDrDw = "0";
   String selectedCategoriaName = '';
+  bool estadoI = false;
   bool swch = false;
   String nuevovalor = "0";
   final RegistroController registroController = Get.put(RegistroController());
@@ -31,6 +39,8 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
   TextEditingController url = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    DeleteController deleteController = DeleteController();
+    swch = widget.productoModel.enVenta;
     return KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible) {
       return Scaffold(
           appBar: AppBar(
@@ -47,6 +57,9 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                 children: [
                   SizedBox(
                     height: Get.height / 20,
+                  ),
+                  CachedNetworkImage(
+                    imageUrl: widget.productoModel.productoImg[0],
                   ),
                   Container(
                     alignment: Alignment.center,
@@ -72,18 +85,12 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                           cursorColor: AppConstant.appSecondColor,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
-                            hintText: "Nombre Producto",
-                            prefixIcon: Icon(Icons.gif_box),
-                            contentPadding:
-                                EdgeInsets.only(top: 2.0, left: 8.0),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                          validator: (name) => name!.length < 10
-                              ? 'Debe tener mas de 10 caracteres'
-                              : null,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                              hintText: widget.productoModel.productoName,
+                              prefixIcon: Icon(Icons.gif_box),
+                              contentPadding:
+                                  EdgeInsets.only(top: 2.0, left: 8.0),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0))),
                         ),
                       )),
                   Container(
@@ -96,18 +103,12 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                           cursorColor: AppConstant.appSecondColor,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
-                            hintText: "Precio Total del producto",
-                            prefixIcon: Icon(Icons.price_change_outlined),
-                            contentPadding:
-                                EdgeInsets.only(top: 2.0, left: 8.0),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                          validator: (name) => name!.length < 4
-                              ? 'Debe tener mas de 3 numeros'
-                              : null,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                              hintText: widget.productoModel.precioCompleto,
+                              prefixIcon: Icon(Icons.price_change_outlined),
+                              contentPadding:
+                                  EdgeInsets.only(top: 2.0, left: 8.0),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0))),
                         ),
                       )),
                   Container(
@@ -120,18 +121,12 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                           cursorColor: AppConstant.appSecondColor,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
-                            hintText: "Precio con descuento",
-                            prefixIcon: Icon(Icons.price_change),
-                            contentPadding:
-                                EdgeInsets.only(top: 2.0, left: 8.0),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                          validator: (name) => name!.length < 4
-                              ? 'Debe tener mas de 3 numeros'
-                              : null,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                              hintText: widget.productoModel.precioVenta,
+                              prefixIcon: Icon(Icons.price_change),
+                              contentPadding:
+                                  EdgeInsets.only(top: 2.0, left: 8.0),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0))),
                         ),
                       )),
                   Container(
@@ -145,18 +140,13 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                           cursorColor: AppConstant.appSecondColor,
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
-                            hintText: "Añada una descricion a su Producto",
-                            prefixIcon: Icon(Icons.telegram),
-                            contentPadding:
-                                EdgeInsets.only(top: 2.0, left: 8.0),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                          ),
-                          validator: (name) => name!.length < 10
-                              ? 'Debe tener mas de 10 caracteres'
-                              : null,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                              hintText:
+                                  widget.productoModel.descripcionProducto,
+                              prefixIcon: Icon(Icons.telegram),
+                              contentPadding:
+                                  EdgeInsets.only(top: 2.0, left: 8.0),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0))),
                         ),
                       )),
                   ReusableTextField(
@@ -235,11 +225,13 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                   SizedBox(
                     height: Get.height / 20,
                   ),
+
                   BotonSwitchNaranja(
-                    estadoInicial: false,
+                    estadoInicial: widget.productoModel.enVenta,
                     onCambioEstado: (nuevoValor) {
                       print("Nuevo valor: $nuevoValor");
-                      swch = nuevoValor == 'true';
+                      if (swch = nuevoValor == 'true') ;
+                      print(swch);
                     },
                   ),
                   SizedBox(
@@ -253,7 +245,7 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                           color: AppConstant.appSecondColor,
                           borderRadius: BorderRadius.circular(20.0)),
                       child: TextButton(
-                        child: Text("Guardar Producto",
+                        child: Text("Actualizar Producto",
                             style: TextStyle(color: AppConstant.appTextColor)),
                         onPressed: () async {
                           String name = nameProduct.text.trim();
@@ -276,9 +268,10 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                               colorText: AppConstant.appTextColor,
                             );
                           } else {
-                            AddProductoController addProductoController =
-                                AddProductoController();
-                            addProductoController.addProductoMetodo(
+                            UpdateProductoController updateProductoController =
+                                UpdateProductoController();
+                            updateProductoController.updateProductoMetodo(
+                                widget.productoModel.productoId,
                                 name,
                                 categoriaid,
                                 selectedCategoriaName,
@@ -287,28 +280,75 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                                 urll,
                                 descrip,
                                 swch);
+                            Get.snackbar(
+                              "Producto Updateado Exitosamente.",
+                              "             :D.",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                            Get.offAll(() => AdminMainScreen());
                           }
                         },
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: Get.height / 39,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Ya tienes una cuenta?  ",
-                          style: TextStyle(color: AppConstant.appSecondColor)),
-                      GestureDetector(
-                        onTap: () => Get.offAll(() => LoginScreen()),
-                        child: Text("Logueate.",
-                            style: TextStyle(
-                                color: AppConstant.appSecondColor,
-                                fontWeight: FontWeight.bold)),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: BotonBorrar(
+                        onPressed: () {
+                          AlertDialog alertDialog = AlertDialog(
+                            backgroundColor:
+                                const Color.fromARGB(255, 106, 107, 106),
+                            title: Text(
+                              '¿Estás seguro de que quieres borrar este Producto?',
+                              style: TextStyle(color: AppConstant.appTextColor),
+                            ),
+                            content: Text(
+                              'Esta acción no se puede deshacer.',
+                              style: TextStyle(color: AppConstant.appTextColor),
+                            ),
+                            actions: [
+                              TextButton(
+                                child: Text(
+                                  'Cancelar',
+                                  style: TextStyle(
+                                      color: AppConstant.appSecondColor),
+                                  selectionColor: AppConstant.appSecondColor,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: Text('Borrar',
+                                    style: TextStyle(
+                                        color: AppConstant.appSecondColor)),
+                                onPressed: () {
+                                  deleteController.borrarDocument("productos",
+                                      widget.productoModel.productoId);
+                                  Get.snackbar(
+                                    "Producto Eliminado Exitosamente.",
+                                    "             :D.",
+                                    snackPosition: SnackPosition.BOTTOM,
+                                    backgroundColor: AppConstant.appSecondColor,
+                                    colorText: AppConstant.appTextColor,
+                                  );
+                                  Get.offAll(() => AdminMainScreen());
+                                },
+                              ),
+                            ],
+                          );
+
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) => alertDialog);
+                        },
                       ),
-                    ],
-                  )
+                    ),
+                  ),
                 ],
               ),
             ),

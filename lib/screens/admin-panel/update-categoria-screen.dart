@@ -10,6 +10,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/eliminar-archivo-firebase-controller.dart';
+import 'admin-main-screen.dart';
 
 class UpdateCategoriaScreen extends StatefulWidget {
   final CategoriasModel categoriasModel;
@@ -140,7 +141,7 @@ class _UpdateCategoriaScreenState extends State<UpdateCategoriaScreen> {
                               backgroundColor: AppConstant.appSecondColor,
                               colorText: AppConstant.appTextColor,
                             );
-                            Get.offAll(() => CrudCategoriesScreen());
+                            Get.offAll(() => AdminMainScreen());
                           }
                         },
                       ),
@@ -152,14 +153,57 @@ class _UpdateCategoriaScreenState extends State<UpdateCategoriaScreen> {
                       padding: const EdgeInsets.all(16.0),
                       child: BotonBorrar(
                         onPressed: () {
-                          deleteController.borrarDocument(
-                              "categorias", widget.categoriasModel.categoriaId);
+                          AlertDialog alertDialog = AlertDialog(
+                            backgroundColor:
+                                const Color.fromARGB(255, 106, 107, 106),
+                            title: Text(
+                              '¿Estás seguro de que quieres borrar esta categoría?',
+                              style: TextStyle(color: AppConstant.appTextColor),
+                            ),
+                            content: Text(
+                              'Esta acción no se puede deshacer.',
+                              style: TextStyle(color: AppConstant.appTextColor),
+                            ),
+                            actions: [
+                              TextButton(
+                                child: Text(
+                                  'Cancelar',
+                                  style: TextStyle(
+                                      color: AppConstant.appSecondColor),
+                                  selectionColor: AppConstant.appSecondColor,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: Text('Borrar',
+                                    style: TextStyle(
+                                        color: AppConstant.appSecondColor)),
+                                onPressed: () {
+                                  deleteController.borrarDocument("categorias",
+                                      widget.categoriasModel.categoriaId);
+                                  Get.snackbar(
+                                    "Categoria Eliminada Exitosamente.",
+                                    "             :D.",
+                                    snackPosition: SnackPosition.BOTTOM,
+                                    backgroundColor: AppConstant.appSecondColor,
+                                    colorText: AppConstant.appTextColor,
+                                  );
+                                  Get.offAll(() => AdminMainScreen());
+                                },
+                              ),
+                            ],
+                          );
 
-                          Get.to(() => CrudCategoriesScreen());
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) => alertDialog);
                         },
                       ),
                     ),
                   ),
+
                   // SizedBox(
                   //   height: Get.height / 39,
                   // ),
