@@ -9,6 +9,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'carrito-screen.dart';
+
 class DetallesProductosScreeen extends StatefulWidget {
   ProductoModel productoModel;
   DetallesProductosScreeen({super.key, required this.productoModel});
@@ -24,8 +26,23 @@ class _DetallesProductosScreeenState extends State<DetallesProductosScreeen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: AppConstant.appTextColor),
         backgroundColor: AppConstant.appMainColor,
-        title: Text("Detalles del Producto"),
+        title: Text(
+          "Detalles del Producto",
+          style: TextStyle(color: AppConstant.appTextColor),
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () => Get.to(() => CarritoScreen()),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.shopping_cart,
+              ),
+            ),
+          )
+        ],
       ),
       body: Container(
         child: Column(
@@ -185,12 +202,14 @@ class _DetallesProductosScreeenState extends State<DetallesProductosScreeen> {
     DocumentSnapshot snapshot = await documentReference.get();
 
     if (snapshot.exists) {
-      int cantidadActual = snapshot['precioProducto'];
+      int cantidadActual = snapshot['cantidadProducto'];
       int actualizarCantidad = cantidadActual + incrementoPrecio;
-      double totalPrecio = double.parse(widget.productoModel.precioCompleto) *
+      double totalPrecio = double.parse(widget.productoModel.enVenta
+              ? widget.productoModel.precioVenta
+              : widget.productoModel.precioCompleto) *
           actualizarCantidad;
       await documentReference.update({
-        'precioProducto': actualizarCantidad,
+        'cantidadProducto': actualizarCantidad,
         'precioTotalProducto': totalPrecio,
       });
       print("producto existe");
@@ -212,11 +231,12 @@ class _DetallesProductosScreeenState extends State<DetallesProductosScreeen> {
           productoImagen: widget.productoModel.productoImg,
           enVenta: widget.productoModel.enVenta,
           productoDescripcion: widget.productoModel.descripcionProducto,
-          createdAt: widget.productoModel.createdAt,
-          updtatedAt: widget.productoModel.updatedAt,
+          createdAt: DateTime.now(),
+          updtatedAt: DateTime.now(),
           cantidadProducto: 1,
-          precioTotalProducto:
-              double.parse(widget.productoModel.precioCompleto));
+          precioTotalProducto: double.parse(widget.productoModel.enVenta
+              ? widget.productoModel.precioVenta
+              : widget.productoModel.precioCompleto));
       await documentReference.set(carritoModel.toMap());
       print("producto added");
     }

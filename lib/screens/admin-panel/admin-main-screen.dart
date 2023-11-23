@@ -1,19 +1,17 @@
 import 'package:e_shop/screens/admin-panel/crud-categorias-screen.dart';
 import 'package:e_shop/screens/admin-panel/crud-productos-off-screen.dart';
-import 'package:e_shop/screens/admin-panel/crud-productos-screnn.dart';
 import 'package:e_shop/screens/user-panel/carrito-screen.dart';
-import 'package:e_shop/screens/user-panel/todas-ventas-flash-productos.dart';
 import 'package:e_shop/utils/app-constant.dart';
 import 'package:e_shop/widgets/custom-drawer-widget.dart';
+import 'package:e_shop/widgets/edit-producto-widget.dart';
+import 'package:e_shop/widgets/edit-ventas-flash-widget.dart';
+import 'package:e_shop/widgets/edith-categoria-widget.dart';
 import 'package:e_shop/widgets/heading-widget.dart';
-import 'package:e_shop/widgets/ventas-flash-widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../widgets/banner-widget.dart';
-import '../../widgets/categoria-widget.dart';
-import '../../widgets/todos-productos-widget.dart';
 
 class AdminMainScreen extends StatelessWidget {
   const AdminMainScreen({super.key});
@@ -54,7 +52,7 @@ class AdminMainScreen extends StatelessWidget {
               buttonText: "Ver más >",
             ),
 
-            CategoriaWidget(),
+            EditCategoriaWidget(),
 
             HeadingWidget(
               headingTitle: "Ventas Relampago",
@@ -63,16 +61,16 @@ class AdminMainScreen extends StatelessWidget {
               buttonText: "Ver más >",
             ),
 
-            VentasFlashWidget(),
+            EditVentasFlashWidget(),
 
             HeadingWidget(
               headingTitle: "Todos los Productos",
               headingSubTitle: "Precios bajos",
-              onTap: () => Get.to(() => CrudProductosScreen()),
+              onTap: () => Get.to(() => CarritoScreen()),
               buttonText: "Ver más >",
             ),
 
-            AllProductosWidget(),
+            EditAllProductosWidget(),
           ],
         )),
       ),

@@ -5,14 +5,15 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_shop/models/categoria-model.dart';
+import 'package:e_shop/screens/admin-panel/update-categoria-screen.dart';
 import 'package:e_shop/screens/user-panel/single-categoria-productos-screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_card/image_card.dart';
 
-class CategoriaWidget extends StatelessWidget {
-  const CategoriaWidget({super.key});
+class EditCategoriaWidget extends StatelessWidget {
+  const EditCategoriaWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +58,8 @@ class CategoriaWidget extends StatelessWidget {
                 return Row(
                   children: [
                     GestureDetector(
-                      onTap: () => Get.to(() => SingleCategoriaProductosScreen(
-                          categoriaId: categoriasModel.categoriaId)),
+                      onTap: () =>
+                          Get.to(() => UpdateCategoriaScreen(categoriasModel)),
                       child: Padding(
                         padding: EdgeInsets.all(5.0),
                         child: Container(

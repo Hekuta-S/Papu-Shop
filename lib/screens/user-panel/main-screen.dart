@@ -39,7 +39,7 @@ class MainScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Icon(Icons.shopping_cart),
             ),
-          )
+          ),
         ],
       ),
       drawer: DrawerWidget(),

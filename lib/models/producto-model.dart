@@ -36,8 +36,8 @@ class ProductoModel {
       'productoImg': productoImg,
       'enVenta': enVenta,
       'descripcionProducto': descripcionProducto,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
+      'createAt': createdAt,
+      'updateAt': updatedAt,
     };
   }
 
@@ -52,8 +52,8 @@ class ProductoModel {
       productoImg: json['productoImg'],
       enVenta: json['enVenta'],
       descripcionProducto: json['descripcionProducto'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
+      createdAt: json['createAt'],
+      updatedAt: json['updateAt'],
     );
   }
 }

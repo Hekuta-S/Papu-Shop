@@ -39,8 +39,8 @@ class CarritoModel {
       'productoImagen': productoImagen,
       'enVenta': enVenta,
       'productoDescripcion': productoDescripcion,
-      'createdAt': createdAt,
-      'updtatedAt': updtatedAt,
+      'createAt': createdAt,
+      'updtateAt': updtatedAt,
       'cantidadProducto': cantidadProducto,
       'precioTotalProducto': precioTotalProducto,
     };
@@ -57,8 +57,8 @@ class CarritoModel {
       productoImagen: json['productoImagen'],
       enVenta: json['enVenta'],
       productoDescripcion: json['productoDescripcion'],
-      createdAt: json['createdAt'],
-      updtatedAt: json['updtatedAt'],
+      createdAt: json['createAt'],
+      updtatedAt: json['updtateAt'],
       cantidadProducto: json['cantidadProducto'](),
       precioTotalProducto: json['precioTotalProducto'],
     );

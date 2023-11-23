@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_shop/controllers/add-categoria-controller.dart';
 import 'package:e_shop/controllers/registro-controller.dart';
 import 'package:e_shop/controllers/update-categoria-controller.dart';
 import 'package:e_shop/models/categoria-model.dart';
-import 'package:e_shop/screens/admin-panel/crud-categorias-screen.dart';
 import 'package:e_shop/utils/app-constant.dart';
 import 'package:e_shop/widgets/buttom-borrar.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +72,7 @@ class _UpdateCategoriaScreenState extends State<UpdateCategoriaScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: TextField(
                           controller: categoriaName,
+                          maxLength: 10,
                           cursorColor: AppConstant.appSecondColor,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
@@ -90,6 +91,7 @@ class _UpdateCategoriaScreenState extends State<UpdateCategoriaScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: TextField(
                           controller: categoriaImg,
+                          maxLength: 100,
                           cursorColor: AppConstant.appSecondColor,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
@@ -125,23 +127,47 @@ class _UpdateCategoriaScreenState extends State<UpdateCategoriaScreen> {
                               backgroundColor: AppConstant.appSecondColor,
                               colorText: AppConstant.appTextColor,
                             );
-                          } else {
-                            UpdateCategoriaController
-                                updateCategoriaController =
-                                UpdateCategoriaController();
-                            updateCategoriaController
-                                .addOrUpdateCategoriaMetodo(
-                                    widget.categoriasModel.categoriaId,
-                                    name,
-                                    img);
+                          } else if (name.length < 10) {
                             Get.snackbar(
-                              "Categoria Updateada Exitosamente.",
-                              "             :D.",
+                              "Error",
+                              "El nombre de la categoría debe tener más de 10 caracteres",
                               snackPosition: SnackPosition.BOTTOM,
                               backgroundColor: AppConstant.appSecondColor,
                               colorText: AppConstant.appTextColor,
                             );
-                            Get.offAll(() => AdminMainScreen());
+                          } else {
+                            AddCategoriaController addCategoriaController =
+                                AddCategoriaController();
+
+                            bool categoriaExists = await addCategoriaController
+                                .checkCategoriaExistencia(name);
+
+                            if (categoriaExists) {
+                              Get.snackbar(
+                                "Error al editar la categoría.",
+                                "La categoría ya existe.",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: AppConstant.appSecondColor,
+                                colorText: AppConstant.appTextColor,
+                              );
+                            } else {
+                              UpdateCategoriaController
+                                  updateCategoriaController =
+                                  UpdateCategoriaController();
+                              updateCategoriaController
+                                  .addOrUpdateCategoriaMetodo(
+                                      widget.categoriasModel.categoriaId,
+                                      name,
+                                      img);
+                              Get.snackbar(
+                                "Categoria Updateada Exitosamente.",
+                                "             :D.",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: AppConstant.appSecondColor,
+                                colorText: AppConstant.appTextColor,
+                              );
+                              Get.offAll(() => AdminMainScreen());
+                            }
                           }
                         },
                       ),

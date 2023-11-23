@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -60,6 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
                           controller: userEmail,
+                          maxLength: 50,
                           cursorColor: AppConstant.appSecondColor,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
@@ -69,6 +69,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   EdgeInsets.only(top: 2.0, left: 8.0),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0))),
+                          validator: (name) => name!.length < 10
+                              ? 'Debe tener mas de 10 caracteres'
+                              : null,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                         ),
                       )),
                   Container(
@@ -78,6 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
                           controller: username,
+                          maxLength: 20,
                           cursorColor: AppConstant.appSecondColor,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
@@ -87,6 +92,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   EdgeInsets.only(top: 2.0, left: 8.0),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0))),
+                          validator: (name) => name!.length < 10
+                              ? 'Debe tener minimo 3 caracteres'
+                              : null,
                         ),
                       )),
                   Container(
@@ -96,15 +104,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
                           controller: userPhone,
+                          maxLength: 10,
                           cursorColor: AppConstant.appSecondColor,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
-                              hintText: "Telefono",
-                              prefixIcon: Icon(Icons.phone),
-                              contentPadding:
-                                  EdgeInsets.only(top: 2.0, left: 8.0),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0))),
+                            hintText: "Telefono",
+                            prefixIcon: Icon(Icons.phone),
+                            contentPadding:
+                                EdgeInsets.only(top: 2.0, left: 8.0),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          validator: (name) => name!.length < 10
+                              ? 'Debe tener 10 caracteres'
+                              : null,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                         ),
                       )),
                   Container(
@@ -114,6 +129,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
                           controller: userCity,
+                          maxLength: 30,
                           cursorColor: AppConstant.appSecondColor,
                           keyboardType: TextInputType.streetAddress,
                           decoration: InputDecoration(
@@ -123,6 +139,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   EdgeInsets.only(top: 2.0, left: 8.0),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0))),
+                          validator: (name) => name!.length < 10
+                              ? 'Debe tener mas de 10 caracteres'
+                              : null,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                         ),
                       )),
                   Container(
@@ -133,26 +153,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: Obx(
                           () => TextFormField(
                             controller: userPassword,
+                            maxLength: 30,
                             obscureText:
                                 registroController.isPasswordVisible.value,
                             cursorColor: AppConstant.appSecondColor,
                             keyboardType: TextInputType.visiblePassword,
                             decoration: InputDecoration(
-                                hintText: "Contraseña",
-                                prefixIcon: Icon(Icons.password),
-                                suffixIcon: GestureDetector(
-                                    onTap: () {
-                                      registroController.isPasswordVisible
-                                          .toggle();
-                                    },
-                                    child: registroController
-                                            .isPasswordVisible.value
-                                        ? Icon(Icons.visibility_off)
-                                        : Icon(Icons.visibility)),
-                                contentPadding:
-                                    EdgeInsets.only(top: 2.0, left: 8.0),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0))),
+                              hintText: "Contraseña",
+                              prefixIcon: Icon(Icons.password),
+                              suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    registroController.isPasswordVisible
+                                        .toggle();
+                                  },
+                                  child:
+                                      registroController.isPasswordVisible.value
+                                          ? Icon(Icons.visibility_off)
+                                          : Icon(Icons.visibility)),
+                              contentPadding:
+                                  EdgeInsets.only(top: 2.0, left: 8.0),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                            validator: (name) => name!.length < 10
+                                ? 'Debe tener mas de 4 caracteres'
+                                : null,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                           ),
                         )),
                   ),
@@ -184,6 +212,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             Get.snackbar(
                               "Error",
                               "Por favor ingresa todos los datos",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else if (name.length < 3) {
+                            Get.snackbar(
+                              "Error",
+                              "El nombre debe tener mas 3 caracteres",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else if (email.length < 10) {
+                            Get.snackbar(
+                              "Error",
+                              "El numero debe tener mas 3 caracteres",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else if (password.length < 4) {
+                            Get.snackbar(
+                              "Error",
+                              "la descrtipcion debe tener mas de 10 caracteres",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else if (city.length < 10) {
+                            Get.snackbar(
+                              "Error",
+                              "la descrtipcion debe tener mas de 10 caracteres",
                               snackPosition: SnackPosition.BOTTOM,
                               backgroundColor: AppConstant.appSecondColor,
                               colorText: AppConstant.appTextColor,

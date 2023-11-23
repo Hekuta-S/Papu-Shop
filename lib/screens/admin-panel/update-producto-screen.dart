@@ -4,7 +4,6 @@ import 'package:e_shop/controllers/registro-controller.dart';
 import 'package:e_shop/controllers/update-producto-controller.dart';
 import 'package:e_shop/models/producto-model.dart';
 import 'package:e_shop/screens/admin-panel/admin-main-screen.dart';
-import 'package:e_shop/screens/auth-ui/login-screen.dart';
 import 'package:e_shop/utils/app-constant.dart';
 import 'package:e_shop/widgets/boton-switch.dart';
 import 'package:e_shop/widgets/text-field-base.dart';
@@ -263,6 +262,38 @@ class _UpdateProductoScreenState extends State<UpdateProductoScreen> {
                             Get.snackbar(
                               "Error",
                               "Por favor ingresa todos los datos",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else if (pCompleto.length < 3) {
+                            Get.snackbar(
+                              "Error",
+                              "El numero debe tener mas 3 caracteres",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else if (name.length < 3) {
+                            Get.snackbar(
+                              "Error",
+                              "El nombre debe tener mas de 10 caracteres",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else if (pVenta.length < 3) {
+                            Get.snackbar(
+                              "Error",
+                              "El numero debe tener mas 3 caracteres",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else if (descrip.length < 10) {
+                            Get.snackbar(
+                              "Error",
+                              "la descrtipcion debe tener mas de 10 caracteres",
                               snackPosition: SnackPosition.BOTTOM,
                               backgroundColor: AppConstant.appSecondColor,
                               colorText: AppConstant.appTextColor,

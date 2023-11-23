@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 
+import 'admin-main-screen.dart';
+
 class AddProductoScreen extends StatefulWidget {
   const AddProductoScreen({super.key});
 
@@ -275,6 +277,30 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                               backgroundColor: AppConstant.appSecondColor,
                               colorText: AppConstant.appTextColor,
                             );
+                          } else if (pCompleto.length < 3) {
+                            Get.snackbar(
+                              "Error",
+                              "El numero debe tener mas 3 caracteres",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else if (pVenta.length < 3) {
+                            Get.snackbar(
+                              "Error",
+                              "El numero debe tener mas 3 caracteres",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else if (descrip.length < 10) {
+                            Get.snackbar(
+                              "Error",
+                              "la descrtipcion debe tener mas de 10 caracteres",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
                           } else {
                             AddProductoController addProductoController =
                                 AddProductoController();
@@ -287,6 +313,14 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                                 urll,
                                 descrip,
                                 swch);
+                            Get.snackbar(
+                              "Producto Guardado Exitosamente.",
+                              "             :D.",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                            await Get.offAll(() => AdminMainScreen());
                           }
                         },
                       ),
