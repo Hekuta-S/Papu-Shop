@@ -60,7 +60,8 @@ class CarritoModel {
       createdAt: json['createAt'],
       updtatedAt: json['updtateAt'],
       cantidadProducto: json['cantidadProducto'](),
-      precioTotalProducto: json['precioTotalProducto'],
+      precioTotalProducto:
+          double.tryParse("{$json['precioTotalProducto']}") ?? 0,
     );
   }
 }

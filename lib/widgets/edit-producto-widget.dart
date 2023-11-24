@@ -73,8 +73,8 @@ class EditAllProductosWidget extends StatelessWidget {
               return Row(
                 children: [
                   GestureDetector(
-                    onTap: () =>
-                        Get.to(() => UpdateProductoScreen(productoModel)),
+                    onTap: () => Get.to(() =>
+                        DetallesProductosScreeen(productoModel: productoModel)),
                     child: Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Container(

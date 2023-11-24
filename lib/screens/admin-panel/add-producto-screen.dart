@@ -258,6 +258,7 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                         child: Text("Guardar Producto",
                             style: TextStyle(color: AppConstant.appTextColor)),
                         onPressed: () async {
+                          print(categoriaid);
                           String name = nameProduct.text.trim();
                           String pCompleto = precioCompleto.text.trim();
                           String pVenta = precioVenta.text.trim();
@@ -285,6 +286,30 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                               backgroundColor: AppConstant.appSecondColor,
                               colorText: AppConstant.appTextColor,
                             );
+                          } else if (categoriaid == 0) {
+                            Get.snackbar(
+                              "Error",
+                              "Elige una categoria",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else if (categoriaid == 0) {
+                            Get.snackbar(
+                              "Error",
+                              "Elige una categoria",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else if (name.length < 10) {
+                            Get.snackbar(
+                              "Error",
+                              "El nombre debe tener mas de 10 caracteres",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
                           } else if (pVenta.length < 3) {
                             Get.snackbar(
                               "Error",
@@ -302,6 +327,7 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                               colorText: AppConstant.appTextColor,
                             );
                           } else {
+                            print(categoriaid);
                             AddProductoController addProductoController =
                                 AddProductoController();
                             addProductoController.addProductoMetodo(
@@ -320,7 +346,7 @@ class _AddProductoScreenState extends State<AddProductoScreen> {
                               backgroundColor: AppConstant.appSecondColor,
                               colorText: AppConstant.appTextColor,
                             );
-                            await Get.offAll(() => AdminMainScreen());
+                            // await Get.offAll(() => AdminMainScreen());
                           }
                         },
                       ),

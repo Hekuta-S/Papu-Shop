@@ -1,6 +1,7 @@
 import 'package:e_shop/screens/admin-panel/crud-categorias-screen.dart';
 import 'package:e_shop/screens/admin-panel/crud-productos-off-screen.dart';
 import 'package:e_shop/screens/user-panel/carrito-screen.dart';
+import 'package:e_shop/screens/user-panel/factura-screen.dart';
 import 'package:e_shop/utils/app-constant.dart';
 import 'package:e_shop/widgets/custom-drawer-widget.dart';
 import 'package:e_shop/widgets/edit-producto-widget.dart';
@@ -66,7 +67,7 @@ class AdminMainScreen extends StatelessWidget {
             HeadingWidget(
               headingTitle: "Todos los Productos",
               headingSubTitle: "Precios bajos",
-              onTap: () => Get.to(() => CarritoScreen()),
+              onTap: () => Get.to(() => FacturasScreeen()),
               buttonText: "Ver más >",
             ),
 

@@ -74,7 +74,9 @@ class _CarritoScreenState extends State<CarritoScreen> {
                     createdAt: productData['createAt'],
                     updtatedAt: productData['updtateAt'],
                     cantidadProducto: productData['cantidadProducto'],
-                    precioTotalProducto: productData['precioTotalProducto'],
+                    precioTotalProducto: double.tryParse(
+                            "${productData['precioTotalProducto']}") ??
+                        0,
                   );
 
                   productoPresionController.fetchProductosPrecio();
@@ -105,7 +107,9 @@ class _CarritoScreenState extends State<CarritoScreen> {
                             backgroundColor: AppConstant.appMainColor,
                             backgroundImage: NetworkImage(
                                 carritoModel.productoImagen[0].toString())),
-                        title: Text(carritoModel.productoName),
+                        title: Text(carritoModel.productoName +
+                            "  x" +
+                            carritoModel.cantidadProducto.toString()),
                         subtitle: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -202,9 +206,7 @@ class _CarritoScreenState extends State<CarritoScreen> {
                 child: TextButton(
                   child: Text("Comprar",
                       style: TextStyle(color: AppConstant.appTextColor)),
-                  onPressed: () {
-                    print(productoPresionController.totalPrecio.toDouble());
-                  },
+                  onPressed: () {},
                 ),
               ),
             ),
