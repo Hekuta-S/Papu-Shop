@@ -1,19 +1,16 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:e_shop/models/carrito-model.dart';
-import 'package:e_shop/models/producto-model.dart';
+import 'package:e_shop/controllers/busquedas-controller.dart';
+import 'package:e_shop/models/factura-model.dart';
 import 'package:e_shop/utils/app-constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import 'carrito-screen.dart';
 
 class FacturasScreeen extends StatefulWidget {
   // ProductoModel productoModel;
-  FacturasScreeen({super.key});
+  String facturaId;
+  FacturaModel facturaModel;
+  FacturasScreeen(
+      {super.key, required this.facturaModel, required this.facturaId});
 
   @override
   State<FacturasScreeen> createState() => _FacturasScreeenState();
@@ -47,28 +44,26 @@ class _FacturasScreeenState extends State<FacturasScreeen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        alignment: Alignment.topLeft,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                style: DefaultTextStyle.of(context).style,
-                                children: [
-                                  TextSpan(
-                                    text: "Facturar a: ",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  TextSpan(
-                                    text: "nombre cliente",
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                          alignment: Alignment.topLeft,
+                          child: encontrarNombrePorId(
+                              widget.facturaModel.clienteId)
+                          // RichText(
+                          //   text: TextSpan(
+                          //     style: DefaultTextStyle.of(context).style,
+                          //     children: [
+                          //       TextSpan(
+                          //         text: "Enviar a: ",
+                          //         style: TextStyle(fontWeight: FontWeight.bold),
+                          //       ),
+                          //       TextSpan(
+                          //         text: encontrarDireccionPorId(
+                          //                 widget.facturaModel.clienteId)
+                          //             .toString(),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+                          ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -85,9 +80,14 @@ class _FacturasScreeenState extends State<FacturasScreeen> {
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
-                                  TextSpan(
-                                    text: "lista de productos",
-                                  ),
+                                  for (var producto
+                                      in widget.facturaModel.productosCompra)
+                                    TextSpan(
+                                      text:
+                                          '${producto['productoName']} x ${producto['cantidadProducto']} \n',
+                                      style: TextStyle(
+                                          fontStyle: FontStyle.italic),
+                                    ),
                                 ],
                               ),
                             ),
@@ -108,7 +108,7 @@ class _FacturasScreeenState extends State<FacturasScreeen> {
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               TextSpan(
-                                text: "factura id",
+                                text: widget.facturaId,
                               ),
                             ],
                           ),
@@ -118,22 +118,26 @@ class _FacturasScreeenState extends State<FacturasScreeen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        alignment: Alignment.topLeft,
-                        child: RichText(
-                          text: TextSpan(
-                            style: DefaultTextStyle.of(context).style,
-                            children: [
-                              TextSpan(
-                                text: "Enviar a: ",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(
-                                text: "direccion",
-                              ),
-                            ],
+                          alignment: Alignment.topLeft,
+                          child: encontrarDireccionPorId(
+                              widget.facturaModel.clienteId)
+                          // RichText(
+                          //   text: TextSpan(
+                          //     style: DefaultTextStyle.of(context).style,
+                          //     children: [
+                          //       TextSpan(
+                          //         text: "Enviar a: ",
+                          //         style: TextStyle(fontWeight: FontWeight.bold),
+                          //       ),
+                          //       TextSpan(
+                          //         text: encontrarDireccionPorId(
+                          //                 widget.facturaModel.clienteId)
+                          //             .toString(),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                           ),
-                        ),
-                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -148,7 +152,8 @@ class _FacturasScreeenState extends State<FacturasScreeen> {
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               TextSpan(
-                                text: "precio",
+                                text:
+                                    widget.facturaModel.precioTotal.toString(),
                               ),
                             ],
                           ),
@@ -168,6 +173,11 @@ class _FacturasScreeenState extends State<FacturasScreeen> {
         ),
       ),
     );
+  }
+
+  String formatoPersonalizado(String nombreColumna) {
+    // Realiza aquí la manipulación o formato que desees
+    return nombreColumna.replaceAll('productoName', ' ').toUpperCase();
   }
 
   // Future<void> comprobarExistenciaProducto({
@@ -201,6 +211,15 @@ class _FacturasScreeenState extends State<FacturasScreeen> {
   //         'createAt': DateTime.now(),
   //       },
   //     );
+
+//este esssssssss
+
+  // FacturaModel facturaModel = FacturaModel(
+  //     clienteId: widget.facturaModel.clienteId,
+  //     productosCompra: widget.facturaModel.,
+  //     precioTotal: precioTotal,
+  //     createdAt: createdAt,
+  //     updatedAt: updatedAt);
 
   //     CarritoModel carritoModel = CarritoModel(
   //         produntoId: widget.productoModel.productoId,

@@ -274,7 +274,31 @@ class _UpdateProductoScreenState extends State<UpdateProductoScreen> {
                               backgroundColor: AppConstant.appSecondColor,
                               colorText: AppConstant.appTextColor,
                             );
-                          } else if (name.length < 3) {
+                          } else if (pCompleto.length < 3) {
+                            Get.snackbar(
+                              "Error",
+                              "El numero debe tener mas 3 caracteres",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else if (categoriaid == 0) {
+                            Get.snackbar(
+                              "Error",
+                              "Elige una categoria",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else if (categoriaid == 0) {
+                            Get.snackbar(
+                              "Error",
+                              "Elige una categoria",
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: AppConstant.appSecondColor,
+                              colorText: AppConstant.appTextColor,
+                            );
+                          } else if (name.length < 10) {
                             Get.snackbar(
                               "Error",
                               "El nombre debe tener mas de 10 caracteres",

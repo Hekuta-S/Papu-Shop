@@ -43,6 +43,7 @@ class AddCategoriaController extends GetxController {
         .where("categoriaName", isEqualTo: categoriaName)
         .get();
 
+    print(querySnapshot.docs.isNotEmpty);
     // Si hay documentos en la consulta, significa que la categoría ya existe
     return querySnapshot.docs.isNotEmpty;
   }

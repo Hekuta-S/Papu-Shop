@@ -7,17 +7,15 @@ class FacturaController extends GetxController {
   Future<void> agregarFactura({
     required String clienteId,
     required List<dynamic> productosCompra,
-    required bool precioTotal,
-    required DateTime createdAt,
-    required DateTime updatedAt,
+    required double precioTotal,
   }) async {
     try {
       DocumentReference docRef = await _firestore.collection("facturas").add({
         "clienteId": clienteId,
         "productosCompra": productosCompra,
         "precioTotal": precioTotal,
-        "createdAt": createdAt,
-        "updatedAt": updatedAt,
+        "createdAt": DateTime.now(),
+        "updatedAt": DateTime.now(),
       });
 
       String facturaId = docRef.id;

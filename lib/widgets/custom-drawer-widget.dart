@@ -1,3 +1,6 @@
+import 'package:e_shop/screens/user-panel/carrito-screen.dart';
+import 'package:e_shop/screens/user-panel/factura-screen.dart';
+import 'package:e_shop/screens/user-panel/facturas-screen.dart';
 import 'package:e_shop/utils/app-constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -70,32 +73,38 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     Icon(Icons.arrow_forward, color: AppConstant.appTextColor),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: ListTile(
-                titleAlignment: ListTileTitleAlignment.center,
-                title: Text(
-                  "Productos",
-                  style: TextStyle(color: AppConstant.appTextColor),
+            GestureDetector(
+              onTap: () => Get.to(() => CarritoScreen()),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: ListTile(
+                  titleAlignment: ListTileTitleAlignment.center,
+                  title: Text(
+                    "Carrito",
+                    style: TextStyle(color: AppConstant.appTextColor),
+                  ),
+                  leading: Icon(Icons.production_quantity_limits,
+                      color: AppConstant.appTextColor),
+                  trailing: Icon(Icons.arrow_forward,
+                      color: AppConstant.appTextColor),
                 ),
-                leading: Icon(Icons.production_quantity_limits,
-                    color: AppConstant.appTextColor),
-                trailing:
-                    Icon(Icons.arrow_forward, color: AppConstant.appTextColor),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: ListTile(
-                titleAlignment: ListTileTitleAlignment.center,
-                title: Text(
-                  "Ordenes",
-                  style: TextStyle(color: AppConstant.appTextColor),
+            GestureDetector(
+              onTap: () => Get.to(() => Facturas2Screen()),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: ListTile(
+                  titleAlignment: ListTileTitleAlignment.center,
+                  title: Text(
+                    "Facturas",
+                    style: TextStyle(color: AppConstant.appTextColor),
+                  ),
+                  leading:
+                      Icon(Icons.shopping_bag, color: AppConstant.appTextColor),
+                  trailing: Icon(Icons.arrow_forward,
+                      color: AppConstant.appTextColor),
                 ),
-                leading:
-                    Icon(Icons.shopping_bag, color: AppConstant.appTextColor),
-                trailing:
-                    Icon(Icons.arrow_forward, color: AppConstant.appTextColor),
               ),
             ),
             Padding(

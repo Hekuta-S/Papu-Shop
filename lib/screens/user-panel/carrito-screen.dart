@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_shop/controllers/busquedas-controller.dart';
+import 'package:e_shop/controllers/limpiar-carrito-controller.dart';
 import 'package:e_shop/models/carrito-model.dart';
 import 'package:e_shop/utils/app-constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,7 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/add-factura-controller.dart';
 import '../../controllers/precio-carrito-controller.dart';
+import '../../models/factura-model.dart';
 
 class CarritoScreen extends StatefulWidget {
   const CarritoScreen({super.key});
@@ -17,6 +21,7 @@ class CarritoScreen extends StatefulWidget {
 }
 
 class _CarritoScreenState extends State<CarritoScreen> {
+  FacturaController facturaController = FacturaController();
   User? user = FirebaseAuth.instance.currentUser;
   double total = 0.0;
   final ProductoPresionController productoPresionController =
@@ -206,7 +211,23 @@ class _CarritoScreenState extends State<CarritoScreen> {
                 child: TextButton(
                   child: Text("Comprar",
                       style: TextStyle(color: AppConstant.appTextColor)),
-                  onPressed: () {},
+                  onPressed: () async {
+                    List<Map<String, dynamic>> datosCarritos =
+                        await obtenerDatosCarritos(user!.uid);
+
+                    datosCarritos.forEach((datos) {
+                      print(
+                          ' Producto: ${datos['productoName']} x ${datos['cantidadProducto']}');
+                    });
+
+                    facturaController.agregarFactura(
+                        clienteId: user!.uid,
+                        productosCompra: datosCarritos,
+                        precioTotal:
+                            productoPresionController.totalPrecio.toDouble());
+
+                    eliminarProductos(user!.uid);
+                  },
                 ),
               ),
             ),
