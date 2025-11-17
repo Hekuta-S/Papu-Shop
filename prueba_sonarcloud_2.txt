@@ -1,0 +1,2 @@
+Segundo archivo de prueba para activar el workflow de SonarCloud.
+Fecha: 2025-11-17
