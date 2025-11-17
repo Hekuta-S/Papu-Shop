@@ -18,6 +18,10 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Doctor
+        run: flutter doctor
       - name: Build
         run: flutter build apk --release
       - name: SonarQube Scan
