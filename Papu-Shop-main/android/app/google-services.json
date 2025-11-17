@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "47782821637",
+    "project_id": "papushoop-bd3f9",
+    "storage_bucket": "papushoop-bd3f9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47782821637:android:10523e424607c980e7816c",
+        "android_client_info": {
+          "package_name": "com.example.e_shop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8yfdXhL8JQw0aDI48nADNxigr4XdWUuw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
